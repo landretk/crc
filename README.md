@@ -21,3 +21,8 @@ uint32_t crc32(void const* data, size_t len, uint32_t init);
 #define INCLUDE_CRC32 1
 #include "crclib.h"
 ```
+
+## Run Tests
+```bash
+cc -o crc-test test.c && ./crc-test
+```
