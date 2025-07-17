@@ -4,6 +4,8 @@ Some basic CRC functions demonstrating the different types of CRC algorithms (fo
 
 Lookup tables behind defines so only data for desired algorithms is pulled into project
 
+Default algorithms chosen to match Python stdlib binascii.crc_hqx() and binascii.crc32() for consistentcy across tools
+
 
 ## Usage
 Use by defining a crc.h/crc.c implementation with the algorithms you want selected
