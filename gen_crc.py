@@ -14,9 +14,9 @@ def bit_reverse(num, width):
 def generate_crc(width, type: CRCType, poly):
     table = []
 
-    poly = poly if type == CRCType.Forward else bit_reverse(poly, width)
-
     max_int = ((1 << width) - 1)
+    poly = poly & max_int
+    poly = poly if type == CRCType.Forward else bit_reverse(poly, width)
 
     for byte in range(256):
         if type == CRCType.Forward:
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     width = int(args.width)
-    if width != 16 and width != 32:
-        print("Error: width must be one of 16, 32\n")
+    if width != 8 and width != 16 and width != 32 and width != 64:
+        print("Error: width must be one of 8, 16, 32, 64\n")
         parser.print_usage()
         exit(1)
     
@@ -64,17 +64,21 @@ if __name__ == "__main__":
 
     table = generate_crc(width, crc_type, polynomial)
 
+    cols = 8
+    if width == 64:
+        cols = 4
+
     print(f"static const uint{width}_t {name.upper()}_TABLE[256] = {{")
-    for i in range(len(table)//8):
-        for j in range(8):
-            index = i*8+j
+    for i in range(len(table)//cols):
+        for j in range(cols):
+            index = i*cols+j
             if j == 0:
                 print("    ", end='')
             if (index < len(table)):
                 print('0x{0:0{1}X}'.format(table[index], width//4), end='')
             if (index < len(table)-1):
                 print(',', end='')
-            if j < 7:
+            if j < (cols-1):
                 print(' ', end='')
         print("")
     print(f"}};\n")
