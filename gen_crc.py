@@ -77,4 +77,9 @@ if __name__ == "__main__":
             if j < 7:
                 print(' ', end='')
         print("")
-    print("};")
+    print(f"}};\n")
+
+    print(f"uint{width}_t {name.lower()}(void const* data, size_t len, uint{width}_t init) {{")
+    crc_type_str = "ref" if crc_type == CRCType.Reflected else "fwd"
+    print(f"    return crc{width}{crc_type_str}(data, len, init, {name.upper()}_TABLE);")
+    print(f"}}")
